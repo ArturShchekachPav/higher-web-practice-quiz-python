@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 
-from quiz.models import Quiz, Question, Category
+from quiz.models import Category, Question, Quiz
 
 
 class AbstractCategoryService(ABC):

@@ -1,36 +1,72 @@
 """Модуль c роутингом"""
 
+from django.urls import include, path
 
-#### Category
+from quiz.views.category import CategoryDetailView, CategoryListCreateView
+from quiz.views.question import (
+    CheckAnswerView,
+    QuestionDetailView,
+    QuestionListCreateView,
+    QuestionsByTextView,
+    QuestionsForQuizView,
+    RandomQuestionFromQuizView,
+)
+from quiz.views.quiz import QuizByTitleView, QuizDetailView, QuizListCreateView
 
-# - POST `/api/category` - создание категории
-# - GET `/api/category` - получение всех категории
-# - GET `/api/category/<int:id>` - получение категории по идентификатору
-# - PUT `/api/category/<int:id>` - изменение категории
-# - DELETE `/api/category/<int:id>` - удаление категории
+questions_urls = [
+    path(
+        '',
+        QuestionListCreateView.as_view(),
+        name='question-list-create'
+    ),
+    path(
+        '<int:question_id>',
+        QuestionDetailView.as_view(),
+        name='question-detail'
+    ),
+    path(
+        'by_text/<str:text>',
+        QuestionsByTextView.as_view(),
+        name='question-by-text'
+    ),
+    path(
+        '<int:question_id>/check',
+        CheckAnswerView.as_view(),
+        name='question-check'
+    ),
+]
 
+quizes_urls = [
+    path('', QuizListCreateView.as_view(), name='quiz-list-create'),
+    path('<int:quiz_id>/', QuizDetailView.as_view(), name='quiz-detail'),
+    path(
+        'by_title/<str:title>/',
+        QuizByTitleView.as_view(),
+        name='quiz-by-title'
+    ),
+    path(
+        '<int:quiz_id>/random_question/',
+        RandomQuestionFromQuizView.as_view(),
+        name='quiz-random-question'
+    ),
+    path(
+        '<int:quiz_id>/questions',
+        QuestionsForQuizView.as_view(),
+        name='quiz-questions'
+    ),
+]
 
-#### Question
+categories_urls = [
+    path('', CategoryListCreateView.as_view(), name='category-list-create'),
+    path(
+        '<int:category_id>/',
+        CategoryDetailView.as_view(),
+        name='category-detail'
+    ),
+]
 
-# - POST `/api/question` - создание вопроса
-# - GET `/api/question` - получение всех вопросов
-# - GET `/api/question/<int:id>` - получение вопроса по идентификатору
-# - GET `/api/question/by_text/<str:text>` - получение вопроса по тексту
-# - POST `/api/question/<int:id>/check` - проверка ответа на вопрос
-# - PUT `/api/question/<int:id>` - изменение вопроса
-# - DELETE `/api/question/<int:id>` - удаление вопроса
-
-
-#### Quiz
-
-# - POST `/api/quiz` - создание квиза
-# - GET `/api/quiz` - получение всех квизов
-# - GET `/api/quiz/<int:id>` - получение квиза по идентификатору
-# - GET `/api/quiz/<int:id>/random_question` - получение случайного вопроса по идентификатору квиза
-# - GET `/api/quiz/by_title/<str:title>` - получение квиза по названию
-# - PUT `/api/quiz/<int:id>` - изменение квиза
-# - DELETE `/api/quiz/<int:id>` - удаление квиза
-
-
-# Сюда добавляем все пути и их обработчики
-urlpatterns = []
+urlpatterns = [
+    path('question/', include(questions_urls)),
+    path('quiz/', include(quizes_urls)),
+    path('category/', include(categories_urls)),
+]

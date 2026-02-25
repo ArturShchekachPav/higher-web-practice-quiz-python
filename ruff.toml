@@ -2,6 +2,7 @@ line-length = 120
 
 exclude = [
     "*venv",
+    "**/migrations/*"
 ]
 
 [lint]
@@ -25,7 +26,7 @@ ignore = [
     "RUF010", "RUF002", "RUF012", "E741", "D202", "D212", "D200",
     "D104", "D100", "D101", "D107", "D400", "N818",
     "ANN002", "ANN003", "ANN204", "ANN401", "B904", "B010",
-    "RET505",
+    "RET505", "RUF001",
 ]
 
 [lint.flake8-quotes]
