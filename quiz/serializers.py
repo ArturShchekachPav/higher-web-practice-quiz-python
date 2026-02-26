@@ -6,27 +6,26 @@ from quiz.models import Category, Question, Quiz
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    """Сериализатор для категорий"""
+    """Сериализатор для категорий."""
 
     class Meta:
-        """Мета-класс для настройки сериализатора"""
+        """Мета-класс для настройки сериализатора."""
 
         model = Category
         fields = '__all__'
 
 
 class QuestionSerializer(serializers.ModelSerializer):
-    """Сериализатор для вопросов"""
+    """Сериализатор для вопросов."""
 
     class Meta:
-        """Мета-класс для настройки сериализатора"""
+        """Мета-класс для настройки сериализатора."""
 
         model = Question
         fields = '__all__'
 
     def validate(self, data: dict[str, any]) -> dict[str, any]:
-        """Метод для валидации сериализатора"""
-
+        """Метод для валидации сериализатора."""
         options = data.get('options')
         correct_answer = data.get('correct_answer')
 
@@ -39,10 +38,10 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class QuizSerializer(serializers.ModelSerializer):
-    """Сериализатор для квизов"""
+    """Сериализатор для квизов."""
 
     class Meta:
-        """Мета-класс для настройки сериализатора"""
+        """Мета-класс для настройки сериализатора."""
 
         model = Quiz
         fields = '__all__'

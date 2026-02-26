@@ -1,39 +1,34 @@
-"""Модуль с реализацией сервиса категорий"""
+"""Модуль с реализацией сервиса категорий."""
+
+from django.shortcuts import get_object_or_404
 
 from quiz.dao import AbstractCategoryService
 from quiz.models import Category
+from quiz.utils import update_model_instance
 
 
 class CategoryService(AbstractCategoryService):
     """Реализация сервиса для категорий"""
 
     def list_categories(self) -> list[Category]:
-        """Получение списка категорий"""
-
+        """Получить список категорий."""
         return list(Category.objects.all())
 
     def get_category(self, category_id: int) -> Category:
-        """Получение категории"""
-
-        return Category.objects.get(pk=category_id)
+        """Получить категорию по идентификатору."""
+        return get_object_or_404(Category, pk=category_id)
 
     def create_category(self, title: str) -> Category:
-        """Создание категории"""
-
-        return Category.objects.create(title=title)
-
-    def update_category(self, category_id: int, data: dict) -> Category:
-        """Обновление категории"""
-
-        category = self.get_category(category_id)
-
-        for key, value in data.items():
-            setattr(category, key, value)
-
-        category.save()
+        """Создать категорию или вернуть существующую."""
+        category, _ = Category.objects.get_or_create(title=title)
         return category
 
-    def delete_category(self, category_id: int) -> None:
-        """Удаление категории"""
+    def update_category(self, category_id: int, data: dict) -> Category:
+        """Обновить категорию"""
+        category = self.get_category(category_id)
+        return update_model_instance(category, data)
 
-        Category.objects.get(pk=category_id).delete()
+    def delete_category(self, category_id: int) -> None:
+        """Удалить категорию."""
+        category = self.get_category(category_id)
+        category.delete()

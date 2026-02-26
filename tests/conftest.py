@@ -1,6 +1,7 @@
 import pytest
-from quiz.models import Category, Question, Quiz
 from django.urls import reverse
+
+from quiz.models import Category, Question, Quiz
 
 FORM_CATEGORY_DATA = {'title': 'Новое название категории'}
 

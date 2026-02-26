@@ -1,45 +1,37 @@
-"""Модуль с реализацией сервиса квизов"""
+"""Модуль с реализацией сервиса квизов."""
 
+from django.shortcuts import get_object_or_404
 
 from quiz.dao import AbstractQuizService
 from quiz.models import Quiz
+from quiz.utils import update_model_instance
 
 
 class QuizService(AbstractQuizService):
-    """Реализация сервиса для квиза"""
+    """Реализация сервиса для квиза."""
 
     def list_quizzes(self) -> list[Quiz]:
-        """Получение списка квизов"""
-
+        """Получить список квизов."""
         return list(Quiz.objects.all())
 
-    def get_quiz(self, id: int) -> Quiz:
-        """Получение квиза по id"""
-
-        return Quiz.objects.get(pk=id)
+    def get_quiz(self, quiz_id: int) -> Quiz:
+        """Получить квиз по идентификатору."""
+        return get_object_or_404(Quiz, pk=quiz_id)
 
     def get_quizes_by_title(self, title: str) -> list[Quiz]:
-        """Получение квизов по названию"""
-
+        """Получить список квизов по названию."""
         return list(Quiz.objects.filter(title__icontains=title))
 
     def create_quiz(self, data: dict) -> Quiz:
-        """Создание квиза"""
-
+        """Создать квиз."""
         return Quiz.objects.create(**data)
 
-    def update_quiz(self, id: int, data: dict) -> Quiz:
-        """Обновление квиза по id"""
+    def update_quiz(self, quiz_id: int, data: dict) -> Quiz:
+        """Обновить квиз."""
+        quiz = self.get_quiz(quiz_id)
+        return update_model_instance(quiz, data)
 
-        quiz = self.get_quiz(id)
-
-        for key, value in data.items():
-            setattr(quiz, key, value)
-
-        quiz.save()
-        return quiz
-
-    def delete_quiz(self, id: int) -> None:
-        """Удаление квиза по id"""
-
-        Quiz.objects.get(pk=id).delete()
+    def delete_quiz(self, quiz_id: int) -> None:
+        """Удалить квиз."""
+        quiz = self.get_quiz(quiz_id)
+        quiz.delete()
